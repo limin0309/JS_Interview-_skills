@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>点击弹出对应的序号</title>
+</head>
+<body>
+<script>
+    /*创建10个<a>标签 点击时候弹出来对应的序号*/
+    /*这是一个错误的写法*/
+    var i,a
+    for(i=0;i<10;i++){
+        a=document.createElement('a')
+        a.innerHTML=i+'<br>'
+        a.addEventListener('click',function (e) {
+            e.preventDefault()
+            alert(i)//自由变量 ，要去父作用于获取值
+        })
+        document.body.appendChild(a)
+    }
+
+
+    /*创建10个<a>标签 点击时候弹出来对应的序号*/
+    /*这是正确的写法*/
+var i
+    for(var i=0;i<10;i++){
+        (function (i) {
+            //函数作用域
+            var a=document.createElement('a')
+            a.innerHTML=i+'<br>'
+            a.addEventListener('click',function (e) {
+                e.preventDefault()
+                alert(i)//自由变量 ，要去父作用于获取值
+            })
+            document.body.appendChild(a)
+        })(i)
+    }
+
+
+
+
+
+//    /*实际开发中闭包的应用*/
+    //闭包实际应用中主要用于封装变量、收敛权限
+    function isFirstLoad() {
+        var _list=[]
+        return function (id) {
+            if(_list.indexOf(id)>=0){
+                return false
+            }else{
+                _list.push(id)
+                return true
+            }
+        }
+    }
+    //使用
+    var firstLoad=isFirstLoad()
+    firstLoad(10)//true
+    firstLoad(10)//false
+    firstLoad(20)//true
+    firstLoad(20)//false
+    //你在isfirstLoad函数外面，根本不可能修改掉_list的值
+
+
+</script>
+</body>
+</html>
